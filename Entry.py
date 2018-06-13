@@ -8,5 +8,5 @@ class Entry(object):
 
     def __str__(self):
         return "Name: " + self.name + "\nGender: " + self.gender + "\nAge: " + self.age + \
-               "\nCity " + self.city + "\nTime " + self.time + "\n"
+               "\nCity: " + self.city + "\nTime: " + self.time + "\n"
 
