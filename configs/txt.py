@@ -1,12 +1,14 @@
 import urllib.request as url
 from Entry import Entry
 
-result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2017/11/ColdTur2017-2017-Results.txt'
+#result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2017/11/ColdTur2017-2017-Results.txt'
+result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2016/04/BAMar-Results-3.txt'
+#result_page = 'http://www.mdtiming.com/2018/AS-Valentine2018Results.TXT'
 table = [{}]
 
 def findStart(lines):
     for line in lines:
-        if "Place" in line:
+        if "=" in line:
             return lines.index(line)
     return -1
 
@@ -14,43 +16,57 @@ def findRecognizedCol(col_name):
     name_list = ['Name', 'First', 'Last', 'name', 'NAME', 'FIRST', 'LAST']
     age_list = ['Ag', 'Age', 'age', 'AGE']
     gender_list = ['Sex', 'S', 'Gender']
-    time_list = ['Time', 'Gun Time', 'GunTime', 'Net Time', 'NetTime', 'Finish']
-    city_list = ['City', 'Town']
+    time_list = ['Gun Time', 'GunTime', 'Net Time', 'NetTime', 'Finish', 'Time', 'Gun', 'Chip', 'ChipTime']
+    city_list = ['City', 'Town', 'City                 St']
     try:
-        if col_name in name_list:
-            return 'Name'
-        elif col_name in age_list:
-            return 'Age'
-        elif col_name in gender_list:
-            return 'Gender'
-        elif col_name in time_list:
-            return 'Time'
-        elif col_name in city_list:
-            return 'City'
+        for name_option in name_list:
+            if col_name.find(name_option) != -1:
+                return 'Name'
+        for age_option in age_list:
+            if col_name.find(age_option) != -1:
+                return 'Age'
+        for gender_option in gender_list:
+            if col_name.find(gender_option) != -1:
+                return 'Gender'
+        for time_option in time_list:
+            if col_name.find(time_option) != -1:
+                return 'Time'
+        for city_option in city_list:
+            if col_name.find(city_option) != -1:
+                return 'City'
     except ValueError:
         return ''
 
 
-def organizeTable(first):
-    first_split = first.split()
-    for col_name in first_split:
-        start_idx = first.find(col_name)
-        try:
-            end_idx = first.find(first_split[first_split.index(col_name) + 1])
-        except:
-            end_idx = len(first) - 1
-
+def organizeTable(headers_line, indices):
+    for i in range(0, len(indices) - 1):
+        start_idx = indices[i]
+        end_idx = indices[i+1]
+        col_name = headers_line[start_idx:end_idx].strip()
         table.append({'ColName': col_name, 'StartIDX': start_idx, 'EndIDX': end_idx, 'RecName': findRecognizedCol(col_name)})
+    for row in table:
+        print(row)
 
+
+def findIndices(equals_line):
+    indices = []
+    indices.append(0)
+    for i in range(0, len(equals_line)):
+        if equals_line[i] == " ":
+            indices.append(i)
+    return indices
 
 data = url.urlopen(result_page)
 lines = str(data.read()).split('\\r\\n')
-first = lines[findStart(lines)]
-organizeTable(first)
+
+equals_idx = findStart(lines)
+headers_idx = equals_idx - 1
+
+indices = findIndices(lines[equals_idx])
+organizeTable(lines[headers_idx], indices)
+
+
 entries = []
-
-attributes = ['Name', 'Age', 'Gender', 'City', 'Time']
-
 results = lines[findStart(lines) + 2:]
 for result in results:
     name = ''
