@@ -2,9 +2,11 @@ import urllib.request as url
 from Entry import Entry
 
 #result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2017/11/ColdTur2017-2017-Results.txt'
-result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2016/04/BAMar-Results-3.txt'
+#result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2016/04/BAMar-Results-3.txt'
 #result_page = 'http://www.mdtiming.com/2018/AS-Valentine2018Results.TXT'
 table = [{}]
+log = True
+debug = False
 
 def findStart(lines):
     for line in lines:
@@ -27,7 +29,8 @@ def findRecognizedCol(col_name):
                 return 'Age'
         for gender_option in gender_list:
             if col_name.find(gender_option) != -1:
-                return 'Gender'
+                if col_name != 'St':
+                    return 'Gender'
         for time_option in time_list:
             if col_name.find(time_option) != -1:
                 return 'Time'
@@ -44,8 +47,9 @@ def organizeTable(headers_line, indices):
         end_idx = indices[i+1]
         col_name = headers_line[start_idx:end_idx].strip()
         table.append({'ColName': col_name, 'StartIDX': start_idx, 'EndIDX': end_idx, 'RecName': findRecognizedCol(col_name)})
-    for row in table:
-        print(row)
+    if debug:
+        for row in table:
+             print(row)
 
 
 def findIndices(equals_line):
@@ -56,50 +60,53 @@ def findIndices(equals_line):
             indices.append(i)
     return indices
 
-data = url.urlopen(result_page)
-lines = str(data.read()).split('\\r\\n')
+def main(result_page, race):
+    print(result_page)
+    data = url.urlopen(result_page)
+    lines = str(data.read()).split('\\r\\n')
 
-equals_idx = findStart(lines)
-headers_idx = equals_idx - 1
+    equals_idx = findStart(lines)
+    headers_idx = equals_idx - 1
 
-indices = findIndices(lines[equals_idx])
-organizeTable(lines[headers_idx], indices)
+    indices = findIndices(lines[equals_idx])
+    organizeTable(lines[headers_idx], indices)
 
 
-entries = []
-results = lines[findStart(lines) + 2:]
-for result in results:
-    name = ''
-    age = ''
-    city = ''
-    gender = ''
-    time = ''
-    for row in table:
-        if row.get('RecName') == 'Name':
-            s = row.get('StartIDX')
-            e = row.get('EndIDX')
-            name = result[s:e]
-        elif row.get('RecName') == 'Age':
-            s = row.get('StartIDX')
-            e = row.get('EndIDX')
-            age = result[s:e]
-        elif row.get('RecName') == 'Gender':
-            s = row.get('StartIDX')
-            e = row.get('EndIDX')
-            gender = result[s:e]
-        elif row.get('RecName') == 'City':
-            s = row.get('StartIDX')
-            e = row.get('EndIDX')
-            city = result[s:e]
-        elif row.get('RecName') == 'Time':
-            s = row.get('StartIDX')
-            e = row.get('EndIDX')
-            time = result[s:e]
-    entry = Entry(name, gender, age, city, time)
-    entries.append(entry)
+    entries = []
+    results = lines[findStart(lines) + 1:]
+    for result in results:
+        name = ''
+        age = ''
+        city = ''
+        gender = ''
+        time = ''
+        for row in table:
+            if row.get('RecName') == 'Name':
+                s = row.get('StartIDX')
+                e = row.get('EndIDX')
+                name = result[s:e].strip()
+            elif row.get('RecName') == 'Age':
+                s = row.get('StartIDX')
+                e = row.get('EndIDX')
+                age = result[s:e].strip()
+            elif row.get('RecName') == 'Gender':
+                s = row.get('StartIDX')
+                e = row.get('EndIDX')
+                gender = result[s:e].strip()
+            elif row.get('RecName') == 'City':
+                s = row.get('StartIDX')
+                e = row.get('EndIDX')
+                city = result[s:e].strip()
+            elif row.get('RecName') == 'Time':
+                s = row.get('StartIDX')
+                e = row.get('EndIDX')
+                time = result[s:e].strip()
+        entry = Entry(name, gender, age, city, time)
+        entries.append(entry)
 
-for entry in entries:
-    print(entry)
+    if log:
+        for entry in entries:
+            print(entry)
 
 
 
