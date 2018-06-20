@@ -100,6 +100,59 @@ def main(pages, race):
                         time = entry[10].text.strip()
                         entries.append(Entry(name, gender, age, city, time))
 
+        if race == 'Baltimore':
+            body = soup.find_all('tbody')
+            result = body[0].find_all('tr')
+            for r in result:
+                entry = r.find_all('td')
+                if len(entry) >= 11:
+                    name = entry[2].text.strip()
+                    city = entry[3].text.strip()
+                    age = entry[5].text.strip()
+                    gender = entry[6].text.strip()
+                    time = entry[11].text.strip()
+                    entries.append(Entry(name, gender, age, city, time))
+
+        if race == "Frederick":
+            body = soup.find_all('tbody')
+            result = body[0].find_all('tr')
+            for r in result:
+                entry = r.find_all('td')
+                if len(entry) >= 9:
+                    name = entry[2].a.text.strip()
+                    city = entry[6].text.strip()
+                    age = entry[3].text.strip()
+                    gender = entry[4].text.strip()
+                    time = entry[8].text.strip()
+                    entries.append(Entry(name, gender, age, city, time))
+
+        if race == "Boston":
+            body = soup.find_all('tbody')
+            result = body[0].find_all('tr')
+            for r in result:
+                entry = r.find_all('td')
+                if len(entry) >= 5:
+                    name = entry[1].a.text.strip()
+                    city = entry[2].text.strip()
+                    age = entry[3].text.strip()
+                    gender = ""
+                    time = entry[4].text.strip()
+                    entries.append(Entry(name, gender, age, city, time))
+                    print(Entry(name, gender, age, city, time))
+
+        # if race == "Hat":
+        #     table = soup.find_all('table')
+        #     result = table[1].find_all('tr')
+        #     for r in result:
+        #         print(r)
+        #         entry = r.find_all('td')
+        #         if len(entry) >= 9:
+        #             name = entry[2].text.strip() + " " + entry[3].text.strip()
+        #             city = entry[4].text.strip()
+        #             age = entry[6].text.strip()
+        #             gender = entry[7].text.strip()
+        #             time = entry[9].text.strip()
+        #             entries.append(Entry(name, gender, age, city, time))
 
         if log:
             for entry in entries:

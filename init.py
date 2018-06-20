@@ -50,6 +50,13 @@ def main():
             pages.append(link + str(i))
         html_parse.main(pages, race)
 
+    elif race == "Baltimore":
+        link = link[0:(len(link) - 1)]
+        pages = []
+        for i in range(1, 41):
+            pages.append(link + str(i))
+        html_parse.main(pages, race)
+
     else:
         pages = []
         pages.append(link)
@@ -63,7 +70,7 @@ if __name__ == '__main__':
 March
 Shamrock 5K, Charm City Run, paginated, hard to parse- http://results.charmcityrun.com/content/under-armour-kelly-st-patricks-day-shamrock-5k-2018?page=1
 National Marathon, competitor, paginated, hard to parse- http://www.runrocknroll.com/finisher-zone/search-and-results/?resultspage=1&eventid=71&subevent_id=&yearid=&firstname=&lastname=&bib=&gender=&division=&state=&city=&perpage=13791
-HatRun 50K, Scrape from HTML
+HatRun 50K, Scrape from HTML- https://ultrasignup.com/results_event.aspx?did=51102
 B&A Half and Full, Annapolis Striders, Already formatted- http://www.mdtiming.com/2018/BA2018-Mara-Results.TXT
                                                         
 April
@@ -78,11 +85,11 @@ Gettysburg Marathon, itsyourrace.com, paginated: http://www.itsyourrace.com/Resu
                                     
 Pikes Peek 10K, MCRRC, hack, then already formatted- https://www.mcrrc.org/race-results/2018/04/pikes-peek-10k-13/
 May
-Frederick Half-Marathon, chronotrack, paginated, hard to parse
-Maryland Half-Marathon, Charm City Run, paginated, hard to parse
-Columbia Triathlon, clean up, already formatted
+Frederick Half-Marathon, chronotrack, paginated, hard to parse- http://www.zippyraceresults.com/searchrwt.php?ID=7157
+Maryland Half-Marathon, Charm City Run, paginated, hard to parse- http://results.charmcityrun.com/content/river-valley-run-trail-half-marathon-2018?page=0
+Columbia Triathlon, clean up, already formatted - CANCELLED
 June
-Baltimore 10 Miler, active.com, paginated, hackable
+Baltimore 10 Miler, active.com, paginated, hackable- http://results.active.com/events/baltimore-10-miler--5/10-mile/expanded?page=1
 Germantown 5 Miler, MCRRC= https://www.mcrrc.org/race-results/2018/05/germantown-5-miler-9/
 Dawson's Fathers Day 10K, Annapolis Striders= https://www.annapolisstriders.org/result/2018-dawsons-fathers-day-10k-results/
 EC5K and EC10K, ripit events= https://resultscui.active.com/api/results/events/NEWEllicottCity5K10K/participants?groupId=206844&routeId=100816&offset=0&limit=100
