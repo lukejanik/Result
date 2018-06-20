@@ -14,13 +14,49 @@ def main(pages, race):
             results = all['items']
             for r in results:
                 data = r['person']
-                time = r['finalResult']['chipTimeResult']
-                time = time[2:]
+                time = ""
+                raw_time = r['finalResult']['chipTimeResult']
+                raw_time = raw_time[2:]
+                hours_idx = raw_time.find("H")
+                if hours_idx != -1:
+                    hours = raw_time[0:hours_idx]
+                    time = hours + ":"
+                minutes_idx = raw_time.find("M")
+                if minutes_idx != -1:
+                    minutes = raw_time[hours_idx+1:minutes_idx]
+                    time = time + minutes + ":"
+                seconds_idx = raw_time.find("S")
+                if seconds_idx != -1:
+                    seconds = raw_time[minutes_idx+1:seconds_idx]
+                    time = time + seconds
                 name = data['firstName'] + " " + data['lastName']
                 age = data['age']
-                gender = data['gender']
+                raw_gender = data['gender']
+                gender = "M"
+                if raw_gender == "Female":
+                    gender = "F"
                 new_entry = Entry(name, gender, age, "", time)
                 entries.append(new_entry)
+
+        if race == 'Cherry Blossom':
+            all = j.load(result)
+            results = all['fullClassifications']
+            for r in results:
+                classification = r['classification']
+                name = classification['name']
+                time = classification['chipTime']
+                gender = "M"
+                gender_raw = classification['gender']
+                if gender_raw == 2:
+                    gender = "F"
+                try:
+                    city = classification['city']
+                except(KeyError):
+                    city = ""
+                age = classification['ageDuringEvent']
+                new_entry = Entry(name, gender, age, city, time)
+                entries.append(new_entry)
+
 
         for entry in entries:
             print(entry)

@@ -1,9 +1,6 @@
 import urllib.request as url
 from Entry import Entry
 
-#result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2017/11/ColdTur2017-2017-Results.txt'
-#result_page = 'https://www.annapolisstriders.org/wp-content/uploads/2016/04/BAMar-Results-3.txt'
-#result_page = 'http://www.mdtiming.com/2018/AS-Valentine2018Results.TXT'
 table = [{}]
 log = True
 debug = False

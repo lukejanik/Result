@@ -33,7 +33,7 @@ def main(pages, race):
                     new_entry = Entry(name, None, None, None, time)
                     entries.append(new_entry)
 
-        if race == "Shamrock":
+        if race == "Shamrock" or race == 'Maryland Half':
             body = soup.find_all('tbody')
             result = body[0].find_all('tr')
             for r in result:
@@ -71,6 +71,35 @@ def main(pages, race):
                     gender = entry[4].text.strip()
                     time = entry[3].text.strip()
                     entries.append(Entry(name, gender, age, city, time))
+
+        if race == "Pikes":
+            body = soup.find_all('tbody')
+            result = body[0].find_all('tr')
+            for r in result:
+                entry = r.find_all('td')
+                if len(entry) >= 5:
+                    name = entry[4].text.strip()
+                    city = ""
+                    age = entry[6].text.strip()
+                    gender = entry[5].text.strip()
+                    time = entry[9].text.strip()
+                    entries.append(Entry(name, gender, age, city, time))
+
+        if race == "Gettysburg":
+            table = soup.find_all('table')
+            if len(table) >= 1:
+                result = table[0].find_all('tr')
+                for r in result:
+                    entry = r.find_all('td')
+                    if len(entry) >= 5:
+                        raw_name = entry[2].text.strip()
+                        name = raw_name[0:raw_name.find("(")]
+                        city = ""
+                        age = entry[6].text.strip()
+                        gender = entry[4].text.strip()
+                        time = entry[10].text.strip()
+                        entries.append(Entry(name, gender, age, city, time))
+
 
         if log:
             for entry in entries:
