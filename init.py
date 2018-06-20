@@ -1,5 +1,6 @@
 import sys
 import txt
+from configs import json
 from configs import html_parse
 
 
@@ -17,10 +18,16 @@ def main():
             pages.append(link + str(i))
         html_parse.main(pages, race)
 
+    elif race == "EC":
+        pages = []
+        pages.append(link)
+        json.main(pages, "EC")
+
     else:
         pages = []
         pages.append(link)
         html_parse.main(pages, race)
+
 
 
 
@@ -48,9 +55,9 @@ Maryland Half-Marathon, Charm City Run, paginated, hard to parse
 Columbia Triathlon, clean up, already formatted
 June
 Baltimore 10 Miler, active.com, paginated, hackable
-Germantown 5 Miler, MCRRC
-Dawson's Fathers Day 10K, Annapolis Striders
-EC5K and EC10K, ripit events
+Germantown 5 Miler, MCRRC= https://www.mcrrc.org/race-results/2018/05/germantown-5-miler-9/
+Dawson's Fathers Day 10K, Annapolis Striders= https://www.annapolisstriders.org/result/2018-dawsons-fathers-day-10k-results/
+EC5K and EC10K, ripit events= https://resultscui.active.com/events/NEWEllicottCity5K10K
 
 
 

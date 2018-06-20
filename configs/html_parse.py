@@ -8,9 +8,9 @@ log = True
 def main(pages, race):
     entries = []
     for page in pages:
-        page = url.urlopen(page)
-        print(page)
-        soup = BeautifulSoup(page, 'html.parser')
+        req = url.Request(page,  headers={'User-Agent': 'Mozilla/5.0'})
+        result = url.urlopen(req).read()
+        soup = BeautifulSoup(result, 'html.parser')
 
         # self, name, gender, age, city, time
         if race == "Cherry Pit":
@@ -47,15 +47,30 @@ def main(pages, race):
                     entries.append(Entry(name, gender, age, city, time))
 
         if race == "Germantown":
-            print("HI!")
             body = soup.find_all('tbody')
             result = body[0].find_all('tr')
-            print(result)
-            for entry in result:
-                if len(entry) >= 6:
+            for r in result:
+                entry = r.find_all('td')
+                if (len(entry) >= 11):
                     name = entry[4].text.strip()
-                    print(name)
+                    city = entry[8].text.strip()
+                    age = entry[6].text.strip()
+                    gender = entry[5].text.strip()
+                    time = entry[11].text.strip()
+                    entries.append(Entry(name, gender, age, city, time))
 
+        if race == "Dawsons":
+            body = soup.find_all('tbody')
+            result = body[0].find_all('tr')
+            for r in result:
+                entry = r.find_all('td')
+                if (len(entry) >= 5):
+                    name = entry[1].text.strip() + " " + entry[2].text.strip()
+                    city = ""
+                    age = entry[5].text.strip()
+                    gender = entry[4].text.strip()
+                    time = entry[3].text.strip()
+                    entries.append(Entry(name, gender, age, city, time))
 
         if log:
             for entry in entries:
