@@ -2,7 +2,7 @@ import urllib.request as url
 from Entry import Entry
 
 table = [{}]
-log = True
+log = False
 debug = False
 
 def findStart(lines):
@@ -104,6 +104,8 @@ def main(result_page, race):
     if log:
         for entry in entries:
             print(entry)
+
+    return entries
 
 
 

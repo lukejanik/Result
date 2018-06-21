@@ -9,7 +9,7 @@ def main(pages, race):
         req = url.Request(page,  headers={'User-Agent': 'Mozilla/5.0'})
         result = url.urlopen(req)
 
-        if race == "EC":
+        if race == "EC 5k" or race == "EC 10k":
             all = j.load(result)
             results = all['items']
             for r in results:
@@ -17,6 +17,7 @@ def main(pages, race):
                 time = ""
                 raw_time = r['finalResult']['chipTimeResult']
                 raw_time = raw_time[2:]
+                print(raw_time)
                 hours_idx = raw_time.find("H")
                 if hours_idx != -1:
                     hours = raw_time[0:hours_idx]
@@ -24,11 +25,22 @@ def main(pages, race):
                 minutes_idx = raw_time.find("M")
                 if minutes_idx != -1:
                     minutes = raw_time[hours_idx+1:minutes_idx]
+                    if (len(minutes)) == 1:
+                        minutes = "0" + minutes
                     time = time + minutes + ":"
+                elif minutes_idx == -1:
+                    minutes_idx = hours_idx
+                    time = time + "00:"
                 seconds_idx = raw_time.find("S")
+                decimal_idx = raw_time.find(".")
                 if seconds_idx != -1:
-                    seconds = raw_time[minutes_idx+1:seconds_idx]
+                    seconds = raw_time[minutes_idx+1:decimal_idx]
+                    if len(seconds) == 1:
+                        seconds = "0" + seconds
+                    if len(seconds) == 0:
+                        seconds = "00" + seconds
                     time = time + seconds
+                print(time)
                 name = data['firstName'] + " " + data['lastName']
                 age = data['age']
                 raw_gender = data['gender']
@@ -58,8 +70,7 @@ def main(pages, race):
                 entries.append(new_entry)
 
 
-        for entry in entries:
-            print(entry)
+    return entries
 
 
 

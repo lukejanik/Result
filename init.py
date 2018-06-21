@@ -2,37 +2,40 @@ import sys
 import txt
 from configs import json
 from configs import html_parse
+import csv
+import request
 
 
 def main():
     link = sys.argv[1]
     race = sys.argv[2]
+    entries = []
 
     if 'txt' in link or 'TXT' in link:
-        txt.main(link, race)
+        entries = txt.main(link, race)
 
     elif race == 'Shamrock':
         link = link[0:len(link)-1]
         pages = []
         for i in range(0, 94):
             pages.append(link + str(i))
-        html_parse.main(pages, race)
+        entries = html_parse.main(pages, race)
 
     elif race == 'Maryland Half':
         link = link[0:len(link)-1]
         pages = []
         for i in range(0, 9):
             pages.append(link + str(i))
-        html_parse.main(pages, race)
+        entries = html_parse.main(pages, race)
 
-    elif race == "EC":
+    elif race == "EC 5k" or race == "EC 10k":
         link = link[0:(len(link)-18)]
         link1 = link + "offset=0&limit=100"
         link2 = link + "offset=100&limit=100"
         pages = []
         pages.append(link1)
         pages.append(link2)
-        json.main(pages, "EC")
+        entries = json.main(pages, race)
 
     elif race == "Cherry Blossom":
         pages = []
@@ -41,26 +44,39 @@ def main():
             new_link = new_link + str((i * 100))
             pages.append(new_link)
             new_link = link
-        json.main(pages, race)
+        entries = json.main(pages, race)
 
-    elif race == "Gettysburg":
+    elif "Gettysburg" in race:
         link = link[0:(len(link)-1)]
         pages = []
-        for i in range(1, 24):
+        for i in range(1, 25):
             pages.append(link + str(i))
-        html_parse.main(pages, race)
+        entries = html_parse.main(pages, race)
 
     elif race == "Baltimore":
         link = link[0:(len(link) - 1)]
         pages = []
         for i in range(1, 41):
             pages.append(link + str(i))
-        html_parse.main(pages, race)
+        entries = html_parse.main(pages, race)
+
+    elif race == "Maryland" or race == "Maryland 5k":
+        entries = request.main(link, race)
 
     else:
         pages = []
         pages.append(link)
-        html_parse.main(pages, race)
+        entries = html_parse.main(pages, race)
+
+    filename = '/Users/luke/PycharmProjects/Result/' + race + ".csv"
+    csv_file = open(filename, 'w')
+    writer = csv.writer(csv_file,
+                        delimiter='|',
+                        quotechar='|',
+                        quoting=csv.QUOTE_MINIMAL)
+    for entry in entries:
+        writer.writerow((entry.name, entry.age, entry.gender, entry.city, entry.time))
+
 
 if __name__ == '__main__':
     main()
@@ -95,7 +111,7 @@ Dawson's Fathers Day 10K, Annapolis Striders= https://www.annapolisstriders.org/
 EC5K and EC10K, ripit events= https://resultscui.active.com/api/results/events/NEWEllicottCity5K10K/participants?groupId=206844&routeId=100816&offset=0&limit=100
                         = https://resultscui.active.com/api/results/events/NEWEllicottCity5K10K/participants?groupId=206845&routeId=100817&offset=0&limit=100
 
-
+Maryland half -  url = 'https://api.v2.raceresults360.com/v2/race/6KQ3mS/2/results?search=&start=0&sortBy=_CURRENT&sortDir=asc'
 
 
 

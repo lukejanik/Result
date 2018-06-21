@@ -2,7 +2,7 @@ import urllib.request as url
 from bs4 import BeautifulSoup
 from Entry import Entry
 
-log = True
+log = False
 
 
 def main(pages, race):
@@ -85,7 +85,7 @@ def main(pages, race):
                     time = entry[9].text.strip()
                     entries.append(Entry(name, gender, age, city, time))
 
-        if race == "Gettysburg":
+        if "Gettysburg" in race:
             table = soup.find_all('table')
             if len(table) >= 1:
                 result = table[0].find_all('tr')
@@ -138,7 +138,7 @@ def main(pages, race):
                     gender = ""
                     time = entry[4].text.strip()
                     entries.append(Entry(name, gender, age, city, time))
-                    print(Entry(name, gender, age, city, time))
+
 
         # if race == "Hat":
         #     table = soup.find_all('table')
@@ -157,6 +157,8 @@ def main(pages, race):
         if log:
             for entry in entries:
                 print(entry)
+
+    return entries
 
 
 
